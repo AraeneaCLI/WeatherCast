@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import {StyleSheet, Text, View, TextInput } from "react-native";
-import Forecast from "./forecast"
-import OpenWeatherMap from "./openweathermap"
+import {StyleSheet, Text, View, TextInput, ImageBackground } from "react-native";
+
+import Forecast from "./src/forecast"
+import OpenWeatherMap from "./src/openweathermap"
 
 class WeatherProject extends Component {
    constructor(props){
@@ -10,7 +11,7 @@ class WeatherProject extends Component {
    }
 
    _handleTextChange = event => {
-     this.setState({ zip : event.nativeEvent.text });
+     let zip = event.nativeEvent.text;
      OpenWeatherMap.fetchForecast(zip).then(forecast => {
        console.log(forecast);
        this.setState({forecast:forecast});
@@ -26,9 +27,14 @@ class WeatherProject extends Component {
            description={this.state.forecast.description}
            temp={this.state.forecast.temp}
          />
-       )
+       );
      }
      return(
+     <ImageBackground
+       source={require("./assets/bg.jpeg")}
+       resizeMode="cover"
+       style={styles.backdrop}
+     >
        <View style={styles.container}>
          <Text style={styles.welcome}>
            You Input {this.state.zip}.
@@ -37,7 +43,9 @@ class WeatherProject extends Component {
            style={styles.input}
            onSubmitEditing={this._handleTextChange}
          />
+         {content}
        </View>
+     </ImageBackground>
      );
    }
 }
@@ -47,7 +55,6 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:"center",
     alignItems: "center",
-    backgroundColor: "#666666"
   },
 
   welcome:{
@@ -63,6 +70,11 @@ const styles = StyleSheet.create({
    height: 40,
    width: 100,
    textAlign: "center"
+   },
+
+   backdrop:{
+    flex:1,
+    flexDirection:"column"
    }
 });
 
